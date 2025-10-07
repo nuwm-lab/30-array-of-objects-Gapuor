@@ -1,24 +1,42 @@
 ﻿using System;
 
-namespace LabWork
+class Plane
 {
-    // Даний проект є шаблоном для виконання лабораторних робіт
-    // з курсу "Об'єктно-орієнтоване програмування та патерни проектування"
-    // Необхідно змінювати і дописувати код лише в цьому проекті
-    // Відео-інструкції щодо роботи з github можна переглянути 
-    // за посиланням https://www.youtube.com/@ViktorZhukovskyy/videos 
+    double A, B, C, D;
+    public Plane(double a, double b, double c, double d)
+    { A=a; B=b; C=c; D=d; Console.WriteLine($"✅ Створено: {A}x+{B}y+{C}z+{D}=0"); }
+    ~Plane() { Console.WriteLine($"❌ Знищено: {A}x+{B}y+{C}z+{D}=0"); }
+    public bool HasPoint(double x, double y, double z) => Math.Abs(A*x+B*y+C*z+D)<1e-9;
+}
 
-    class Result
-    { 
-    // TODO: do it !
-    }
-    
-    class Program
+class Program
+{
+    static void Main()
     {
-        static void Main(string[] args)
-        {
-            
-            Console.WriteLine("Hello World!");
+        Console.Write("n = "); int n=int.Parse(Console.ReadLine());
+        var planes=new Plane[n];
+        for(int i=0;i<n;i++){
+            Console.WriteLine($"Площина {i+1}:");
+            double A=double.Parse(Console.ReadLine()),
+                   B=double.Parse(Console.ReadLine()),
+                   C=double.Parse(Console.ReadLine()),
+                   D=double.Parse(Console.ReadLine());
+            planes[i]=new Plane(A,B,C,D);
         }
+
+        Console.WriteLine("\nКоординати точки:");
+        double x=double.Parse(Console.ReadLine()),
+               y=double.Parse(Console.ReadLine()),
+               z=double.Parse(Console.ReadLine());
+
+        Console.WriteLine("\nПлощини, через які проходить точка:");
+        bool ok=false;
+        for(int i=0;i<n;i++)
+            if(planes[i].HasPoint(x,y,z)){ Console.WriteLine($"→ {i+1}"); ok=true; }
+        if(!ok) Console.WriteLine("Жодна.");
+
+        planes=null;
+        GC.Collect(); GC.WaitForPendingFinalizers();
+        Console.WriteLine("\nКінець програми.");
     }
 }
